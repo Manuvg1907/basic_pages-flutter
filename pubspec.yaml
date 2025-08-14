@@ -1,0 +1,14 @@
+name: flutter_auth_demo
+version: 1.0.0+1
+description: A Flutter app with sign up, login, splash, home, and profile pages.
+environment:
+  sdk: ">=2.17.0 <4.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  uses-material-design: true
