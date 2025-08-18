@@ -17,6 +17,15 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: Colors.deepPurple,
         centerTitle: true,
         elevation: 4,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              // Navigate to edit profile page
+              Navigator.pushNamed(context, '/editProfile', arguments: args);
+            },
+          ),
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -33,6 +42,7 @@ class ProfilePage extends StatelessWidget {
                   CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.deepPurple,
+                    backgroundImage: AssetImage("assets/avatar.png"), // fallback
                     child: Text(
                       username.isNotEmpty ? username[0].toUpperCase() : "U",
                       style: TextStyle(fontSize: 36, color: Colors.white),
@@ -52,33 +62,24 @@ class ProfilePage extends StatelessWidget {
                   SizedBox(height: 8),
 
                   Text(
-                    "Welcome to your profile",
+                    "Welcome to your profile 👋",
                     style: TextStyle(color: Colors.grey[700]),
                   ),
                   SizedBox(height: 20),
 
                   // Info List
-                  ListTile(
-                    leading: Icon(Icons.email, color: Colors.deepPurple),
-                    title: Text("Email"),
-                    subtitle: Text(email),
-                  ),
+                  buildInfoTile(Icons.email, "Email", email),
                   Divider(),
-
-                  ListTile(
-                    leading: Icon(Icons.phone, color: Colors.deepPurple),
-                    title: Text("Phone"),
-                    subtitle: Text(phone),
-                  ),
+                  buildInfoTile(Icons.phone, "Phone", phone),
                   Divider(),
 
                   // Logout Button
                   SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
+                    child: ElevatedButton.icon(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/login');
+                        _showLogoutDialog(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.deepPurple,
@@ -87,7 +88,8 @@ class ProfilePage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(
+                      icon: Icon(Icons.logout),
+                      label: Text(
                         "Logout",
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
@@ -98,6 +100,40 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  // Reusable info tile
+  Widget buildInfoTile(IconData icon, String title, String value) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.deepPurple),
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+      subtitle: Text(value),
+    );
+  }
+
+  // Logout confirmation dialog
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text("Confirm Logout"),
+        content: Text("Are you sure you want to log out?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
+            child: Text("Logout"),
+          ),
+        ],
       ),
     );
   }
